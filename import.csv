@@ -1,0 +1,18 @@
+# Chaque ligne doit contenir 5 valeurs séparées par des points-virgules :
+# - Le premier champ est un nombre entier qui indique l'âge minimum pour écouter l'histoire
+# - Le deuxième champ est le titre de l'histoire
+# - Le troisième champ est le chemin du fichier audio ou txt source, il peut être relatif ou absolu
+# - Le quatrième champ est le chemin du fichier image qui sera utilisé pour illustrer l'histoire, il peut être relatif ou absolu
+# - Le cinquième champ est le nom de la collection à laquelle appartient l'histoire (regroupement Telmi)
+# Soit :
+# Age;Titre;Chemin histoire;Chemin image;Collection
+#
+# Les lignes vides sont ignorées
+# Les lignes commençant par # sont ignorées
+
+# Voici un exemple de fichier CSV correctement formaté:
+# 1;Mon histoire;/chemin/vers/mon/histoire.mp3;/chemin/vers/mon/image.jpg;Ma collection
+
+# La ligne suivante sert d'exemple de lancement pour l'outil et génère 2 packs d'histoires fonctionnels
+1;Exemple numéro 1;./exemple/exemple1.txt;./exemple/exemple.webp;Exemple de pack
+1;Exemple numéro 2;./exemple/exemple2.txt;./exemple/exemple.webp;Exemple de pack

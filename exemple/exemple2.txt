@@ -1,0 +1,1 @@
+Ceci est le deuxième exemple de fichier texte à lire par Telmi.
