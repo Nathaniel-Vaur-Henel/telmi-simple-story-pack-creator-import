@@ -27,6 +27,10 @@ Cet outil :
 2. Ouvrez le projet dans votre IDE.
 3. Lancez l'app en exécutant la classe `Main`. 
    - Si vous voulez, vous pouvez spécifier un chemin vers un fichier `.csv` contenant les chemins des fichiers audio et image à utiliser. Sinon, l'app utilise le fichier `import.csv` à la racine du projet.
+4. Les fichiers sont **copiés** dans le dossier `output` du lancement de l'app.
+5. _Aucun fichier n'est supprimé._
+6. _Aucune vérification de la validité du pack n'est effectuée._
+
 
 ## Format du fichier `.csv`
 

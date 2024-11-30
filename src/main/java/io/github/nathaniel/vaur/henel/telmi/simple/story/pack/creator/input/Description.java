@@ -24,6 +24,8 @@
 
 package io.github.nathaniel.vaur.henel.telmi.simple.story.pack.creator.input;
 
+import java.util.Optional;
+
 /**
  * Classe représentant un conte tel que décrit dans le fichier csv d'import
  *
@@ -34,16 +36,24 @@ package io.github.nathaniel.vaur.henel.telmi.simple.story.pack.creator.input;
  * @param category  Catégorie du conte
  */
 public record Description(int age, String title, String talePath, String imagePath, String category) {
-    public Description {
+    public Description(int age, String title, String talePath, String imagePath, String category) {
+        this.title = title;
+        this.talePath = talePath;
+        this.imagePath = imagePath;
+        this.category = category;
         if (age < 0) {
-            throw new IllegalArgumentException("Age must be positive");
+            System.err.println("Âge négatif: " + age + ". Remplacé par 0");
+            this.age = 0;
+        } else {
+            this.age = age;
         }
     }
 
-    public static Description of(String csvLine) {
+    public static Optional<Description> of(String csvLine) {
         String[] split = csvLine.split(";");
         if (split.length < 4 || split.length > 5) {
-            throw new IllegalArgumentException("Invalid line: " + csvLine);
+            System.err.println("Ligne invalide, donc ignorée : " + csvLine);
+            return Optional.empty();
         }
         int age = Integer.parseInt(split[0]);
         String title = split[1];
@@ -55,6 +65,6 @@ public record Description(int age, String title, String talePath, String imagePa
         } else {
             category = split[4];
         }
-        return new Description(age, title, talePath, imagePath, category);
+        return Optional.of(new Description(age, title, talePath, imagePath, category));
     }
 }

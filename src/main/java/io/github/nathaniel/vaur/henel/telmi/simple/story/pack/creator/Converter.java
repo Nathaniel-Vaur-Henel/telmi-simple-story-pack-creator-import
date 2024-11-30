@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * Convertit les descriptions d'histoires en packs d'histoires compatibles Telmi
@@ -44,9 +45,10 @@ public class Converter {
         Files.readAllLines(importPath).stream()
             .filter(this::isValid)
             .map(Description::of)
+            .flatMap(Optional::stream)
             .map(TelmiPack::of)
             .map(this::write)
-            .forEach(path -> System.out.println("Importing tale: " + path.getFileName()));
+            .forEach(path -> System.out.println("Histoire importée : " + path.getFileName()));
     }
 
     private boolean isValid(String line) {
@@ -55,8 +57,8 @@ public class Converter {
 
     private Path write(TelmiPack telmiPack) {
         try {
-            System.out.println("Writing pack: " + telmiPack.mainTitleTxt());
-            Path root = Paths.get("out", telmiPack.age() + AGE_TITLE_SEPARATOR + telmiPack.mainTitleTxt());
+            System.out.println("Écriture du pack : " + telmiPack.mainTitleTxt());
+            Path root = Paths.get("output", telmiPack.age() + AGE_TITLE_SEPARATOR + telmiPack.mainTitleTxt());
             Files.createDirectories(root);
             Files.writeString(root.resolve("category.txt"), telmiPack.categoryTxt());
             Files.writeString(root.resolve("main-title.txt"), telmiPack.mainTitleTxt());
@@ -75,6 +77,10 @@ public class Converter {
 
     private void copy(Path root, String initialFile, String targetName) throws IOException {
         Path source = Paths.get(initialFile);
+        if( !Files.exists(source) ) {
+            System.err.println("Fichier non trouvé, donc non copié : " + initialFile);
+            return;
+        }
         Path target = root.resolve(targetName + getExtension(initialFile));
         Files.copy(source, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
     }
