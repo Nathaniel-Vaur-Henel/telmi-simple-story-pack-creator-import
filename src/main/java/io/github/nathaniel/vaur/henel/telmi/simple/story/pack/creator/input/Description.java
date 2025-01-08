@@ -24,6 +24,7 @@
 
 package io.github.nathaniel.vaur.henel.telmi.simple.story.pack.creator.input;
 
+import java.nio.file.Path;
 import java.util.Optional;
 
 /**
@@ -37,7 +38,12 @@ import java.util.Optional;
  */
 public record Description(int age, String title, String talePath, String imagePath, String category) {
     public Description(int age, String title, String talePath, String imagePath, String category) {
-        this.title = title;
+        if (title.equals("$fichier$")) {
+            this.title = extractFilename(talePath);
+            System.out.println("Titre issu du nom du fichier: " +  this.title + ".");
+        } else {
+            this.title = title;
+        }
         this.talePath = talePath;
         this.imagePath = imagePath;
         this.category = category;
@@ -49,21 +55,29 @@ public record Description(int age, String title, String talePath, String imagePa
         }
     }
 
+    private static String extractFilename(String talePath) {
+        String filename = Path.of(talePath).getFileName().toString();
+        if (filename.contains(".")) {
+            return filename.substring(0, filename.lastIndexOf('.'));
+        }
+        return filename;
+    }
+
     public static Optional<Description> of(String csvLine) {
         String[] split = csvLine.split(";");
         if (split.length < 4 || split.length > 5) {
             System.err.println("Ligne invalide, donc ignorée : " + csvLine);
             return Optional.empty();
         }
-        int age = Integer.parseInt(split[0]);
-        String title = split[1];
-        String talePath = split[2];
-        String imagePath = split[3];
+        int age = Integer.parseInt(split[0].trim());
+        String title = split[1].trim();
+        String talePath = split[2].trim();
+        String imagePath = split[3].trim();
         String category;
         if (split.length == 4) {
             category = "";
         } else {
-            category = split[4];
+            category = split[4].trim();
         }
         return Optional.of(new Description(age, title, talePath, imagePath, category));
     }
